@@ -51,10 +51,14 @@
     \item{get.bbox}{\code{signature(x = "gpc.poly")}: ... }
     \item{get.pts}{\code{signature(object = "gpc.poly")}: ... }
     \item{intersect}{\code{signature(x = "gpc.poly", y = "gpc.poly")}: ... }
-    \item{plot}{\code{signature(x = "gpc.poly")}: ... }
+    \item{plot}{\code{signature(x = "gpc.poly")}: The argument
+      \code{poly.args} can be used to pass a list of additional
+      arguments to be passed to the underlying \code{polygon} call.}
     \item{scale.poly}{\code{signature(x = "gpc.poly")}: ... }
     \item{setdiff}{\code{signature(x = "gpc.poly", y = "gpc.poly")}: ... }
-    \item{show}{\code{signature(object = "gpc.poly")}: ... }
+    \item{show}{\code{signature(object = "gpc.poly")}: Scale x and y
+      coordinates by amount \code{xscale} and \code{yscale}.  By default
+      \code{xscale} equals \code{yscale}.}
     \item{union}{\code{signature(x = "gpc.poly", y = "gpc.poly")}: ... }
   }
 }

@@ -1,5 +1,5 @@
 ## gpclib:  General Polygon Clipping library for R
-## Copyright (C) 2003 Roger D. Peng <rpeng@jhsph.edu>
+## Copyright (C) 2003-2004 Roger D. Peng <rpeng@jhsph.edu>
 
 
 ## R functions for using GPC library and manipulating polygons
@@ -9,6 +9,24 @@ require(methods)
 
 setClass("gpc.poly", representation(pts = "list"))
 setClass("gpc.poly.nohole", "gpc.poly")
+
+## setValidity("gpc.poly",
+##             function(x) {
+##                 pts <- x@pts
+##                 lens <- sapply(pts, length)
+##                 if(!identical(all(lens == 3), TRUE))
+##                     "Not all contours have correct elements"
+##                 ## correct names (x, y, hole)
+##                 contour.names <- lapply(pts, names)
+##                 correct.names <- c("x", "y", "hole")
+##                 check <- lapply(contour.names, function(n) {
+##                     n %in% correct.names
+##                 })
+##                 if(!identical(all(sapply(check, all)), TRUE))
+##                     "Incorrect list names in contours"
+##                 ## correct types
+##                 ## equal lengths?
+##             })
 
 setMethod("show", "gpc.poly",
           function(object) {
@@ -65,7 +83,8 @@ setMethod("intersect", signature(x = "gpc.poly", y = "gpc.poly"),
           function(x, y) {
               subject <- as(x, "numeric")
               clip <- as(y, "numeric")
-              vec <- .Call("Rgpc_polygon_clip", subject, clip, 1)
+              vec <- .Call("Rgpc_polygon_clip", subject, clip, 1,
+                           PACKAGE = "gpclib")
 
               if(identical(vec, 0)) 
                   rval <- new("gpc.poly")
@@ -79,7 +98,8 @@ setMethod("setdiff", signature(x = "gpc.poly", y = "gpc.poly"),
           function(x, y) {
               subject <- as(x, "numeric")
               clip <- as(y, "numeric")
-              vec <- .Call("Rgpc_polygon_clip", subject, clip, 2);
+              vec <- .Call("Rgpc_polygon_clip", subject, clip, 2,
+                           PACKAGE = "gpclib");
 
               if(identical(vec, 0)) 
                   rval <- new("gpc.poly")
@@ -92,7 +112,8 @@ setMethod("union", signature(x = "gpc.poly", y = "gpc.poly"),
           function(x, y) {
               subject <- as(x, "numeric")
               clip <- as(y, "numeric")
-              vec <- .Call("Rgpc_polygon_clip", subject, clip, 3);
+              vec <- .Call("Rgpc_polygon_clip", subject, clip, 3,
+                           PACKAGE = "gpclib");
 
               if(identical(vec, 0)) 
                   rval <- new("gpc.poly")
@@ -162,7 +183,8 @@ setMethod("area.poly", signature(object = "gpc.poly"),
                           * x.segmat[,2])) / 2
               }
               a <- sapply(object@pts, function(p) area(cbind(p$x, p$y)))
-              sum(a)
+              holeflags <- sapply(object@pts, "[[", "hole")
+              sum(a[!holeflags]) - sum(a[holeflags])
           })
 
 ## Added 2003/01/07
@@ -299,9 +321,6 @@ write.polyfile <- function(poly, filename = "GPCpoly.txt") {
 .First.lib <- function(lib, pkg) {
     require(methods)
     library.dynam("gpclib", pkg, lib)
-    ## where <- match(paste("package:", pkg, sep = ""), search())
-    ## where <- topenv(parent.frame())
-    ## .initRgpc(as.environment(where))
     ver <- as.character(read.dcf(file.path(lib,pkg,"DESCRIPTION"), "Version"))
     cat(paste("General Polygon Clipper Library for R (version ", ver, ")\n",
               sep=""))

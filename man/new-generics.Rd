@@ -69,6 +69,9 @@ scale.poly(x, \dots)
 
 \seealso{\code{"gpc.poly"} class documentation.}
 \examples{
-## None right now.  See class?gpc.poly
+holepoly <- read.polyfile(system.file("poly-ex/hole-poly.txt", package =
+"gpclib"), nohole = FALSE)
+area.poly(holepoly)
+stopifnot(area.poly(holepoly) == 8)
 }
 \keyword{methods}
