@@ -1,90 +1,72 @@
 \name{gpc.poly-class}
 \docType{class}
 \alias{gpc.poly-class}
-\alias{gpc.poly}
-\alias{append.poly}
-\alias{area.poly}
-\alias{get.bbox}
-\alias{scale.poly}
-\alias{get.pts}
+\alias{[,gpc.poly-method}
+\alias{append.poly,gpc.poly,gpc.poly-method}
+\alias{area.poly,gpc.poly-method}
+\alias{coerce,matrix,gpc.poly-method}
+\alias{coerce,data.frame,gpc.poly-method}
+\alias{coerce,gpc.poly,matrix-method}
+\alias{coerce,gpc.poly,numeric-method}
+\alias{coerce,numeric,gpc.poly-method}
+\alias{get.bbox,gpc.poly-method}
+\alias{get.pts,gpc.poly-method}
+\alias{intersect,gpc.poly,gpc.poly-method}
+\alias{plot,gpc.poly-method}
+\alias{scale.poly,gpc.poly-method}
+\alias{setdiff,gpc.poly,gpc.poly-method}
+\alias{show,gpc.poly-method}
+\alias{union,gpc.poly,gpc.poly-method}
 
 \title{Class "gpc.poly"}
-
-\description{A class for polygons consisting of multiple contours.}
-
+\description{
+  A class for representing polygons composed of multiple contours, some
+  of which may be holes.
+}
 \section{Objects from the Class}{
-  Objects can be created by using the function \code{read.polyfile} or by
-  coercing from another data type.  One can also use
-  \code{new("gpc.poly", ...)}.
+  Objects can be created by calls of the form \code{new("gpc.poly",
+    ...)} or by reading in from a file using \code{read.polyfile}.
 }
 \section{Slots}{
   \describe{
-    \item{\code{pts}:}{Object of class \code{"list"}.  A list of lists,
-      actually.  Each sub-list contains the points of a single contour.
-      A sub-list has elements \code{x} and \code{y} which contain,
-      respectively, the x and y coordinates of the vertices of the contour.}
+    \item{\code{pts}:}{Object of class \code{"list"}.  Actually,
+      \code{pts} is a list of lists with length equal to the number of
+      contours in the \code{"gpc.poly"} object.  Each element of
+      \code{pts} is a list of length 3 with names \code{x}, \code{y},
+      and \code{hole}.  \code{x} and \code{y} are vectors containing the
+      x and y coordinates, respectively, while \code{hole} is a logical
+      indicating whether or not the contour is a hole.}
   }
 }
-
 \section{Methods}{
   \describe{
-    \item{[}{\code{signature(x = "gpc.poly")}: return a subset of
-      contours of a polygon as a \code{"gpc.poly"} object.}
-    
-    \item{append.poly}{\code{signature(x = "gpc.poly", y = "gpc.poly")}:
-      join two \code{"gpc.poly"} objects and return the combined polygon
-      as a \code{"gpc.poly"} object.}
-
-    \item{area.poly}{\code{signature(object = "gpc.poly")}:
-      compute the total area of all contours of a
-      polygon.}
-    
-    \item{get.bbox}{\code{signature(x = "gpc.poly")}: return the
-      bounding box of all contours in a polygon.}
-
-    \item{get.pts}{\code{signature(object = "gpc.poly")}: return the
-      \code{pts} slot of argument.}
-
-    \item{intersect}{\code{signature(x = "gpc.poly", y = "gpc.poly")}:
-      return the intersection of polygons \code{x} and \code{y} as a
-      \code{"gpc.poly"} object.}
-
-    \item{plot}{\code{signature(x = "gpc.poly")}: plot a polygon.
-      \code{plot} calls \code{polygon} to plot each contour and
-      arguments to \code{polygon} can be passed as a list via the
-      \code{poly.args} argument for \code{plot}.}
-    
-    \item{scale.poly}{\code{signature(x = "gpc.poly")}: rescale the x
-      and y coordinates of a \code{"gpc.poly"} object.}
-
-    \item{setdiff}{\code{signature(x = "gpc.poly", y = "gpc.poly")}:
-      return the (asymmetric) difference of two polygons, i.e. return
-      \code{x} \ \code{y}.}
-
-    \item{show}{\code{signature(object = "gpc.poly")}: print a
-      \code{"gpc.poly"} object.}
-
-    \item{union}{\code{signature(x = "gpc.poly", y = "gpc.poly")}:
-      return the union of two polygons.}
-
-    \item{coerce}{\code{signature(from = "matrix", to = "gpc.poly")}:
-      convert a matrix into a polygon with one contour. }
-    \item{coerce}{\code{signature(from = "data.frame", to =
-	"gpc.poly")}: convert a data frame into a polygon with one contour. }
-    \item{coerce}{\code{signature(from = "gpc.poly", to = "matrix")}:
-      convert a polygon (with one contour) into a two-column matrix. }
-    \item{coerce}{\code{signature(from = "gpc.poly", to = "numeric")}:
-      convert a polygon in to a vector (don't use this). }
-    \item{coerce}{\code{signature(from = "numeric", to = "gpc.poly")}:
-      convert a vector into a polgon (don't use this). }
+    \item{[}{\code{signature(x = "gpc.poly")}: ... }
+    \item{append.poly}{\code{signature(x = "gpc.poly", y = "gpc.poly")}: ... }
+    \item{area.poly}{\code{signature(object = "gpc.poly")}: ... }
+    \item{coerce}{\code{signature(from = "matrix", to = "gpc.poly")}: ... }
+    \item{coerce}{\code{signature(from = "data.frame", to = "gpc.poly")}: ... }
+    \item{coerce}{\code{signature(from = "gpc.poly", to = "matrix")}: ... }
+    \item{coerce}{\code{signature(from = "gpc.poly", to = "numeric")}: ... }
+    \item{coerce}{\code{signature(from = "numeric", to = "gpc.poly")}: ... }
+    \item{get.bbox}{\code{signature(x = "gpc.poly")}: ... }
+    \item{get.pts}{\code{signature(object = "gpc.poly")}: ... }
+    \item{intersect}{\code{signature(x = "gpc.poly", y = "gpc.poly")}: ... }
+    \item{plot}{\code{signature(x = "gpc.poly")}: ... }
+    \item{scale.poly}{\code{signature(x = "gpc.poly")}: ... }
+    \item{setdiff}{\code{signature(x = "gpc.poly", y = "gpc.poly")}: ... }
+    \item{show}{\code{signature(object = "gpc.poly")}: ... }
+    \item{union}{\code{signature(x = "gpc.poly", y = "gpc.poly")}: ... }
   }
 }
-\author{Roger D. Peng; GPC Library written by Alan Murta}
+\author{Roger D. Peng}
 
-\seealso{\code{\link{read.polyfile}}, \code{\link{write.polyfile}}}
+\note{
+  The class \code{"gpc.poly.nohole"} is identical to
+  \code{"gpc.poly"} except the \code{hole} flag for each contour of a
+  \code{"gpc.poly.nohole"} object is always \code{FALSE}.
+}
 
 \examples{
-
 ## Make some random polygons
 set.seed(100)
 a <- cbind(rnorm(100), rnorm(100))
@@ -117,6 +99,5 @@ plot(union(p1, p2))
 ## combining the two contours
 p.comb <- append.poly(setdiff(p1, p2), setdiff(p2, p1))
 plot(p.comb, poly.args = list(col = 2, border = 0))
-
 }
 \keyword{classes}
