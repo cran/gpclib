@@ -110,7 +110,7 @@ setAs("matrix", "gpc.poly",
       function(from, to) {
           if(ncol(from) > 2)
               stop("Matrix must have 2 columns")
-          p <- list(x = from[,1], y = from[,2])
+          p <- list(x = from[,1], y = from[,2], hole = FALSE)
           new("gpc.poly", pts = list(p))
       })
 
