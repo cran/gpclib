@@ -45,7 +45,7 @@ write.polyfile(poly, filename = "GPCpoly.txt")
   4.5 5.4\cr
 
   The vertices of the polygon can be ordered either clockwise or
-  counter-clockwise.
+  counter-clockwise.  Right now polygons are not allowed to have holes.
 
 }
 

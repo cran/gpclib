@@ -21,7 +21,7 @@
 
 ## Got this trick from the Bioconductor packages.  .First.lib calls
 ## .initRgpc and creates all of the methods in the correct place.
-
+    
 .initRgpc <- function(where) {
     setClass("gpc.poly",
              representation(pts = "list"),
@@ -80,7 +80,7 @@
               function(x, y) {
                   subject <- as(x, "numeric")
                   clip <- as(y, "numeric")
-                  vec <- .Call("gpc_polygon_intersect", subject, clip);
+                  vec <- .Call("gpc_polygon_intersect", subject, clip);                  
 
                   if(identical(vec, 0)) 
                       rval <- new("gpc.poly")
@@ -225,6 +225,7 @@
                   sum(a)
               }, where = where)
 
+    ## Added 1/7/03
     setGeneric("get.pts", function(object)
                standardGeneric("get.pts"), where = where)
 
@@ -260,8 +261,6 @@ write.polyfile <- function(poly, filename = "GPCpoly.txt") {
     }
     close(outfile)
 }
-
-
 
 
 

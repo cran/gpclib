@@ -4,6 +4,9 @@
     library.dynam("gpclib", pkg, lib)
     where <- match(paste("package:", pkg, sep = ""), search())
     .initRgpc(where)
-    cat("General Polygon Clipper Library for R (version 1.0.0)\n")
+    desc <- readLines(file.path(lib, pkg, "DESCRIPTION"))
+    verstr <- desc[grep("^Version:", desc)]
+    ver <- sub("^Version: +", "", verstr)
+    cat(paste("General Polygon Clipper Library for R (version ", ver, ")\n", sep=""))
     cat("\tSee ?gpc.poly for help\n")
 }

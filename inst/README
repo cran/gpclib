@@ -1,6 +1,3 @@
-For copyright information on code written by R. D. Peng, see the file
-`COPYING'.
-
 The General Polygon Clipper GPC library is written by Alan Murta
 <gpc@cs.man.ac.uk>.  Copyright information for the library is
 contained in the individual source files `gpc.c' and `gpc.h' in the
