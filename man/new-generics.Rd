@@ -1,4 +1,5 @@
 \name{new-generics}
+\alias{new-generics}
 \alias{append.poly}
 \alias{append.poly-methods}
 %\alias{append.poly,gpc.poly,gpc.poly-method}

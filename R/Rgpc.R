@@ -4,9 +4,6 @@
 
 ## R functions for using GPC library and manipulating polygons
 
-require(methods)
-
-
 setClass("gpc.poly", representation(pts = "list"))
 setClass("gpc.poly.nohole", "gpc.poly")
 
@@ -318,14 +315,6 @@ write.polyfile <- function(poly, filename = "GPCpoly.txt") {
 
 
 
-.First.lib <- function(lib, pkg) {
-    require(methods)
-    library.dynam("gpclib", pkg, lib)
-    ver <- as.character(read.dcf(file.path(lib,pkg,"DESCRIPTION"), "Version"))
-    cat(paste("General Polygon Clipper Library for R (version ", ver, ")\n",
-              sep=""))
-    cat("\tSee class?gpc.poly for help\n")
-}
 
 
 
