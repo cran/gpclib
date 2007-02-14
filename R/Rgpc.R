@@ -119,6 +119,27 @@ setMethod("union", signature(x = "gpc.poly", y = "gpc.poly"),
               rval
           })
 
+setGeneric("tristrip", function(x) 
+           standardGeneric("tristrip"))
+           
+setMethod("tristrip", signature(x = "gpc.poly"),
+	  function(x) {
+	      poly <- as(x, "numeric")
+	      result <- .Call("Rgpc_polygon_to_tristrip", poly, PACKAGE = "gpclib")
+	      result <- lapply(result, function(strip) matrix(strip, ncol=2, byrow=TRUE))
+	  })
+
+setGeneric("triangulate", function(x) 
+           standardGeneric("triangulate"))
+ 
+setMethod("triangulate", signature(x = "gpc.poly"),
+          function(x) {
+	      tristrip <- tristrip(x)
+	      triangles <- lapply(tristrip, function(strip) 
+	                          strip[1:3 + rep(0:(nrow(strip)-3), each=3), ])
+	      do.call(rbind, triangles)
+	  })
+
 setMethod("[", "gpc.poly",
           function(x, i, j, ..., drop = FALSE) {
               new("gpc.poly", pts = x@pts[i])

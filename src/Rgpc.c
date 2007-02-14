@@ -72,6 +72,42 @@ SEXP Rgpc_polygon_clip(SEXP subjpoly, SEXP clippoly, SEXP op) {
   
 }
 
+SEXP Rgpc_polygon_to_tristrip(SEXP poly) {
+    gpc_polygon subject;
+    gpc_tristrip tristrip;
+    int nsubj;
+    
+    SEXP strip, returnval;
+    double *xsubjpoly;
+    
+    PROTECT(poly = AS_NUMERIC(poly));
+    nsubj = LENGTH(poly);
+
+    xsubjpoly = NUMERIC_POINTER(poly);
+
+    double_to_gpc_polygon(&subject, xsubjpoly, nsubj);
+    gpc_polygon_to_tristrip(&subject, &tristrip);
+  
+    PROTECT(returnval = NEW_LIST(tristrip.num_strips));
+    for (int i=0; i < tristrip.num_strips; i++) {
+    	double *xstrip;
+    	SET_VECTOR_ELT(returnval, i, strip = NEW_NUMERIC(2*tristrip.strip[i].num_vertices));
+    	xstrip = REAL(strip);
+    	
+	for (int j=0; j < tristrip.strip[i].num_vertices; j++) {
+	    xstrip[2*j] = tristrip.strip[i].vertex[j].x;
+	    xstrip[2*j+1] = tristrip.strip[i].vertex[j].y;
+	}
+    }
+
+    gpc_free_polygon(&subject);
+    gpc_free_tristrip(&tristrip);
+
+    UNPROTECT(2);
+
+    return(returnval);
+  
+}
 
 /* unserialize the polygon */
 
@@ -147,8 +183,6 @@ static int compute_polygon_size(gpc_polygon *p)
     }
     return(psize);
 }
-
-
 
 
 
