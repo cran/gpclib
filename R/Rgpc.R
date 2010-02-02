@@ -1,5 +1,5 @@
 ## gpclib:  General Polygon Clipping library for R
-## Copyright (C) 2003-2004 Roger D. Peng <rpeng@jhsph.edu>
+## Copyright (C) 2003-2010 Roger D. Peng <rpeng@jhsph.edu>
 
 
 ## R functions for using GPC library and manipulating polygons
@@ -157,7 +157,7 @@ setMethod("[", "gpc.poly",
 setAs("matrix", "gpc.poly",
       function(from, to) {
           if(ncol(from) > 2)
-              stop("Matrix must have 2 columns")
+              stop("matrix must have 2 columns")
           p <- list(x = from[,1], y = from[,2], hole = FALSE)
           new("gpc.poly", pts = list(p))
       })
@@ -232,11 +232,11 @@ setMethod("get.pts", signature(object = "gpc.poly"),
 ## without holes have different file formats
 
 setAs("numeric", "gpc.poly.nohole", 
-      function(from, to) {
+      function(from) {
           ## The shortest a vector can be is 8 numbers:  1. Num. Contours;
           ## 2. Num pts for first contour; and three vertices
           if(length(from) < 8)
-              stop("Numeric vector not long enough")
+              stop("numeric vector not long enough")
           expand.poly <- function(x) {
               ## `x' is just a long vector of numbers with a special format
               num.contours <- x[1]; x <- x[-1]
@@ -255,11 +255,11 @@ setAs("numeric", "gpc.poly.nohole",
       })
 
 setAs("numeric", "gpc.poly", 
-      function(from, to) {
+      function(from) {
           ## The shortest a vector can be is 9 numbers:  1. Num. Contours;
           ## 2. Num pts for first contour; 3. hole flag; and three vertices
           if(length(from) < 9)
-              stop("Numeric vector not long enough")
+              stop("numeric vector not long enough")
           expand.poly <- function(x) {
               num.contours <- x[1]; x <- x[-1]
               polyfile <- x
@@ -283,7 +283,7 @@ setAs("numeric", "gpc.poly",
 ##
 
 setAs("gpc.poly", "numeric",
-      function(from, to) {
+      function(from) {
           flatten.poly <- function(poly) {
               num.contours <- length(poly@pts)
               flat <- lapply(poly@pts, function(p)
@@ -297,32 +297,42 @@ setAs("gpc.poly", "numeric",
       })
 
 setAs("gpc.poly", "matrix",
-      function(from, to) {
+      function(from) {
           if(length(from@pts) > 1)
-              stop("Can only convert a single contour into a matrix")
+              stop("can only convert a single contour into a matrix")
           pts <- from@pts[[1]]
           m <- cbind(x = pts$x, y = pts$y)
+      })
+
+## 'from' is a list(x = ..., y = ...)
+
+setAs("list", "gpc.poly",
+      function(from) {
+              if(!(names(from) %in% c("x", "y")))
+                      stop("list should have names 'x' and 'y'")
+              if(length(from$x) != length(from$y))
+                      stop("'x' and 'y' elements should have the same length")
+              as(cbind(from$x,from$y), "gpc.poly")
       })
 
 
 ## Read a polygon from a file
 
 read.polyfile <- function(filename, nohole = TRUE) {
-    polyfile <- scan(filename, quiet = TRUE)
-    if(nohole) 
-        p <- as(polyfile, "gpc.poly.nohole")
-    else
-        p <- as(polyfile, "gpc.poly")
-    p
+        polyfile <- scan(filename, quiet = TRUE)
+        if(nohole) 
+                as(polyfile, "gpc.poly.nohole")
+        else
+                as(polyfile, "gpc.poly")
 }
 
 ## Write a "gpc.poly" object to a text file
 
 write.polyfile <- function(poly, filename = "GPCpoly.txt") {    
     if(!is(poly, "gpc.poly"))
-        stop(sQuote("poly"), " should be of class ", dQuote("gpc.poly"))
-    outfile <- file(filename)
-    open(outfile, open = "w")
+        stop("'poly' should be of class 'gpc.poly'")
+    outfile <- file(filename, "w")
+    on.exit(close(outfile))
 
     num.contours <- length(poly@pts)   
     cat(num.contours, "\n", file = outfile)
@@ -336,32 +346,6 @@ write.polyfile <- function(poly, filename = "GPCpoly.txt") {
                 file = outfile, append = TRUE)       
         write(t(m), file = outfile, ncolumns = 2, append = TRUE)
     }
-    close(outfile)
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-##     setAs("gpc.poly.nohole", "numeric",
-##           function(from, to) {
-##               flatten.poly <- function(poly) {
-##                   num.contours <- length(poly@pts)
-##                   flat <- lapply(poly@pts, function(p)
-##                              {
-##                                  v <- as.vector(t(cbind(p$x, p$y)))
-##                                  c(length(p$x), v)
-##                              })
-##                   c(num.contours, unlist(flat))
-##               }
-##               flatten.poly(from)
-##           })
 
