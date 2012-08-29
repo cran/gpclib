@@ -1,9 +1,10 @@
-18abc3e9bd9d6414adafd1752aa60491 *DESCRIPTION
+eb0672682fcb27c7d2572b5fae78b1f0 *DESCRIPTION
 c8d0ce907cafdb83360f3c980627a398 *LICENSE
 48ff21ea1bff9d83eb67195697e29f73 *NAMESPACE
 4d6c4975c2aa1d523add8b2aec0f243b *R/Rgpc.R
-1c8593f7fa9ec3a5c519ea6448767aa8 *R/zzz.R
+893335e36d4b5b07da05a1c134fd2498 *R/zzz.R
 d2352551427f2dbac64d4acec03163c5 *inst/README
+ffee5a8553e6c5ed9e72ccd48ed53ce0 *inst/bugs/bug2.R
 f330d6b1d9127bc82881f33dfe6e18bd *inst/poly-ex/ex-poly1.txt
 734b9a203116bec1dd173e7f8a50e07a *inst/poly-ex/ex-poly2.txt
 bd20bfd0827e13fa7ca4a022810e8962 *inst/poly-ex/hole-poly.txt
@@ -12,7 +13,10 @@ bd20bfd0827e13fa7ca4a022810e8962 *inst/poly-ex/hole-poly.txt
 b9de9300a0b091eb0c39298612d5d586 *man/new-generics.Rd
 9daa96192eadb9b1f430ff76cf9b795f *man/polyfile.Rd
 2a7a565ccccc8e89bff9822ad9deee3a *src/Rgpc.c
-1971c3aac6c0466f7db722deaae7b5fd *src/gpc.c
+c07b34466a480ea60fbb4c63dde6af70 *src/gpc.c
 e342007d53f95cc7ff3364c3a1570be6 *src/gpc.h
+81a169453049b25a378e2015ffb5580a *tests/bug1.R
+94fa2f731c2bd04ae01d60bd8ae98da2 *tests/bug1.Rout.save
+677a75f1194a1051672b13207e688bfb *tests/bug1_data.RData
 1c2e3bb916cf8282426eafc5302ccc63 *tests/reg-tests.R
-7d188ff2c64e444749e7dcbfc1b223c8 *tests/reg-tests.Rout.save
+bfbe0a7286230d812a1799b29de8cbff *tests/reg-tests.Rout.save
