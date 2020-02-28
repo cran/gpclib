@@ -6,6 +6,7 @@
 #include <R.h>
 #include <Rinternals.h>
 #include <Rdefines.h>
+#include <R_ext/Rdynload.h>
 #include "gpc.h"
 
 /* These macros are copied from the GPC C code */
@@ -24,8 +25,6 @@
 static int compute_polygon_size(gpc_polygon *p);
 static void gpc_polygon_to_double(double *a, int na, gpc_polygon *p);
 static void double_to_gpc_polygon(gpc_polygon *p, double *a, int na);
-
-
 
 SEXP Rgpc_polygon_clip(SEXP subjpoly, SEXP clippoly, SEXP op) {
     gpc_polygon subject, clip, result;
@@ -108,6 +107,26 @@ SEXP Rgpc_polygon_to_tristrip(SEXP poly) {
     return(returnval);
   
 }
+
+
+
+static const R_CallMethodDef callMethods[]  = {
+        {"Rgpc_polygon_clip", (DL_FUNC) &Rgpc_polygon_clip, 3},
+        {"Rgpc_polygon_to_tristrip", (DL_FUNC) &Rgpc_polygon_to_tristrip, 1},
+        {NULL, NULL, 0}
+};
+
+void R_init_gpclib(DllInfo *info) {
+        R_registerRoutines(info, NULL, callMethods, NULL, NULL);
+        R_useDynamicSymbols(info, FALSE);
+        R_forceSymbols(info, TRUE);
+}
+
+void R_unload_gpclib(DllInfo *info) {
+        /* Release resources. */
+}
+
+
 
 /* unserialize the polygon */
 
@@ -206,125 +225,3 @@ static int compute_polygon_size(gpc_polygon *p)
 
 
 
-
-
-
-/* 
-   Older code had separate functions for intersect/union/diff.  These
-   are now done with a single function + flag (duh!).  But I'll save these
-   functions just in case.... 
-*/
-
-/*********************************************************************
-
-SEXP gpc_polygon_intersect(SEXP subjpoly, SEXP clippoly) 
-{
-    gpc_polygon subject, clip, result;
-    int polysize, nsubj, nclip;
-    SEXP returnval;
-    double *xreturnval;
-    double *xsubjpoly, *xclippoly;
-  
-    PROTECT(subjpoly = AS_NUMERIC(subjpoly));
-    PROTECT(clippoly = AS_NUMERIC(clippoly));
-    nsubj = LENGTH(subjpoly);
-    nclip = LENGTH(clippoly);
-
-    xsubjpoly = NUMERIC_POINTER(subjpoly);
-    xclippoly = NUMERIC_POINTER(clippoly);
-
-    double_to_gpc_polygon(&subject, xsubjpoly, nsubj);
-    double_to_gpc_polygon(&clip, xclippoly, nclip);
-    gpc_polygon_clip(GPC_INT, &subject, &clip, &result);
-
-    polysize = compute_polygon_size(&result);
-
-    PROTECT(returnval = NEW_NUMERIC(polysize));
-    xreturnval = NUMERIC_POINTER(returnval);
-
-    gpc_polygon_to_double(xreturnval, polysize, &result);
-
-    gpc_free_polygon(&subject);
-    gpc_free_polygon(&clip);
-    gpc_free_polygon(&result);
-
-    UNPROTECT(3);
-
-    return(returnval);
-}
-
-
-
-SEXP gpc_polygon_difference(SEXP subjpoly, SEXP clippoly)
-{
-    gpc_polygon subject, clip, result;
-    int polysize, nsubj, nclip;
-    SEXP returnval;
-    double *xreturnval;
-    double *xsubjpoly, *xclippoly;
-
-    PROTECT(subjpoly = AS_NUMERIC(subjpoly));
-    PROTECT(clippoly = AS_NUMERIC(clippoly));
-    nsubj = LENGTH(subjpoly);
-    nclip = LENGTH(clippoly);
-
-    xsubjpoly = NUMERIC_POINTER(subjpoly);
-    xclippoly = NUMERIC_POINTER(clippoly);
-
-    double_to_gpc_polygon(&subject, xsubjpoly, nsubj);
-    double_to_gpc_polygon(&clip, xclippoly, nclip);
-    gpc_polygon_clip(GPC_DIFF, &subject, &clip, &result);
-
-    polysize = compute_polygon_size(&result);
-
-    PROTECT(returnval = NEW_NUMERIC(polysize));
-    xreturnval = NUMERIC_POINTER(returnval);
-
-    gpc_polygon_to_double(xreturnval, polysize, &result);
-
-    gpc_free_polygon(&subject);
-    gpc_free_polygon(&clip);
-    gpc_free_polygon(&result);
-
-    UNPROTECT(3);
-
-    return(returnval);
-}
-
-
-SEXP gpc_polygon_union(SEXP subjpoly, SEXP clippoly)
-{
-    gpc_polygon subject, clip, result;
-    int polysize, nsubj, nclip;
-    SEXP returnval;
-    double *xreturnval;
-    double *xsubjpoly, *xclippoly;
-
-    PROTECT(subjpoly = AS_NUMERIC(subjpoly));
-    PROTECT(clippoly = AS_NUMERIC(clippoly));
-    nsubj = LENGTH(subjpoly);
-    nclip = LENGTH(clippoly);
-
-    xsubjpoly = NUMERIC_POINTER(subjpoly);
-    xclippoly = NUMERIC_POINTER(clippoly);
-
-    double_to_gpc_polygon(&subject, xsubjpoly, nsubj);
-    double_to_gpc_polygon(&clip, xclippoly, nclip);
-    gpc_polygon_clip(GPC_UNION, &subject, &clip, &result);
-
-    polysize = compute_polygon_size(&result);
-
-    PROTECT(returnval = NEW_NUMERIC(polysize));
-    xreturnval = NUMERIC_POINTER(returnval);
-
-    gpc_polygon_to_double(xreturnval, polysize, &result);
-
-    gpc_free_polygon(&subject);
-    gpc_free_polygon(&clip);
-    gpc_free_polygon(&result);
-
-    UNPROTECT(3);
-
-    return(returnval);
-}
-********************************************************************/
